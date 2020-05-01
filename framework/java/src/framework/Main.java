@@ -7,7 +7,7 @@ public class Main {
 		
 		MyArray<BuildOrder> buildOrders = new MyArray<BuildOrder>();
 		for(int i=0;i<10;i++) {
-			buildOrders.add(new BuildOrder());
+			buildOrders.add(new BuildOrder(3,1,1,10,32));
 		}
 		Builder builder = new Builder();
 		builder.build(buildOrders);

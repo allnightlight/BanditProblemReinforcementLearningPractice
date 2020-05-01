@@ -17,6 +17,7 @@ public class Builder {
 		// TODO Auto-generated constructor stub
 		store = Store.getStoreUnique();
 		agentFactory = AgentFactory.getAgentFactoryUnique();
+		environmentFactory = EnvironmentFactory.getEnvironmentFactoryUnique();
 		trainerFactory = TrainerFactory.getTrainerFactory();
 		valueFunctionApproximatorFactory = ValueFunctionApproximatorFactory.getvalueFunctionApproximatorFactoryUnique();
 		rewardGiverFactory = RewardGiverFactory.getRewardGiverFactoryUnique();
@@ -37,11 +38,7 @@ public class Builder {
 			currentlyTrainedBuildOrder = buildOrder;	
 			currentlyTrainedAgent = agent;
 			
-			ClosedLoopSimulator closedLoopSimulator = new ClosedLoopSimulator(environment, agent, buildOrder);
-			ValueFunctionOptimizer valueFunctionOptimizer = new ValueFunctionOptimizer(valueFunctionApproximator, agent, buildOrder);
-			PolicyOptimizer policyOptimizer = new PolicyOptimizer(agent, valueFunctionApproximator, buildOrder);
-			
-			Trainer trainer = trainerFactory.create(closedLoopSimulator, valueFunctionOptimizer, policyOptimizer, rewardGiver, buildOrder);
+			Trainer trainer = trainerFactory.create(agent, environment, valueFunctionApproximator, rewardGiver, buildOrder);
 			trainer.train(this);
 			
 			currentlyTrainedBuildOrder = null;

@@ -8,5 +8,9 @@ public class Agent {
 	public void loadFromMemento(AgentMemento agentMemento) {
 		return;
 	}
+	
+	public Action call(ObservationSequence observationSequence) {
+		return new Action();
+	}
 
 }

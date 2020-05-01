@@ -12,10 +12,15 @@ public class TrainerFactory {
 		return trainerFactory;
 	}
 	
-	public Trainer create(ClosedLoopSimulator closedLoopSimulator, 
-			ValueFunctionOptimizer valueFunctionOptimizer, 
-			PolicyOptimizer policyOptimizer, RewardGiver rewardGiver, BuildOrder buildOrder) {
-		return new Trainer();
+	public Trainer create(Agent agent, Environment environment, 
+			ValueFunctionApproximator valueFunctionApproximator, 
+			RewardGiver rewardGiver, BuildOrder buildOrder) {
+		
+		ClosedLoopSimulator closedLoopSimulator = new ClosedLoopSimulator(environment, agent, buildOrder);
+		ValueFunctionOptimizer valueFunctionOptimizer = new ValueFunctionOptimizer(valueFunctionApproximator, agent, buildOrder);
+		PolicyOptimizer policyOptimizer = new PolicyOptimizer(agent, valueFunctionApproximator, buildOrder);
+		
+		return new Trainer(closedLoopSimulator, valueFunctionOptimizer, policyOptimizer, rewardGiver, buildOrder);
 	}
 
 }
