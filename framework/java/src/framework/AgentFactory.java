@@ -2,7 +2,7 @@ package framework;
 
 public class AgentFactory {
 	
-	static private AgentFactory agentFactoryUnique = new AgentFactory();
+	static private AgentFactory agentFactoryUnique;
 	
 	private AgentFactory() {
 		// TODO Auto-generated constructor stub
@@ -13,6 +13,7 @@ public class AgentFactory {
 	}
 
 	public static AgentFactory getAgentFactoryUnique() {
+		AgentFactory.agentFactoryUnique  = new AgentFactory();
 		return agentFactoryUnique;
 	}
 }

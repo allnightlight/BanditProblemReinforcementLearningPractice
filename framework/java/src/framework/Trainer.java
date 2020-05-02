@@ -41,7 +41,7 @@ public class Trainer {
 		
 		closedLoopSimulator.requestInit(this);
 
-		for(int i=0; i < buildOrder.getnEpoch();i ++) {
+		for(int i=0; i < this.buildOrder.getnEpoch();i ++) {
 			closedLoopSimulator.requestUpdate(this);
 			valueFunctionOptimizer.requestUpdate(this);
 			policyOptimizer.requestUpdate(this);
@@ -83,7 +83,7 @@ public class Trainer {
 	}
 
 	public void markPolicyUpdate(){
-	    timeLastUpdate = timeSimulation;
+	    timeLastUpdate = this.timeSimulation;
 	}
 	
 	public int getTimeSimulation() {

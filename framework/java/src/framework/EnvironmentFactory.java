@@ -2,7 +2,7 @@ package framework;
 
 public class EnvironmentFactory {
 	
-	static private EnvironmentFactory environmentFactoryUnique = new EnvironmentFactory();
+	static private EnvironmentFactory environmentFactoryUnique;
 	
 	private EnvironmentFactory() {
 		// TODO Auto-generated constructor stub
@@ -13,6 +13,7 @@ public class EnvironmentFactory {
 	}
 
 	public static EnvironmentFactory getEnvironmentFactoryUnique() {
+		EnvironmentFactory.environmentFactoryUnique = new EnvironmentFactory(); 
 		return environmentFactoryUnique;
 	}
 }

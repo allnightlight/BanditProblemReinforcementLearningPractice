@@ -4,7 +4,9 @@ public class ClosedLoopSimulator {
 	
 	private Environment environment;
 	private Agent agent;
-	private ObservationSequence observationSequence;
+	private ObservationSequence observationSequenceLast;
+	private Action actionLast;
+	private ObservationSequence observationSequencePrev;
 	private BuildOrder buildOrder;
 	
 	public ClosedLoopSimulator(Environment environment, Agent agent, BuildOrder buildOrder) {
@@ -12,50 +14,47 @@ public class ClosedLoopSimulator {
 		this.agent = agent;
 		this.environment = environment;
 		this.buildOrder = buildOrder;
-		observationSequence = new ObservationSequence();
+		this.observationSequenceLast = new ObservationSequence();
+		this.actionLast = null;
+		this.observationSequencePrev = null;
 	}
 	
-	public ObservationSequence init() {
-		observationSequence.clear();
+	public void init() {
+		this.observationSequenceLast.clear();
+		this.observationSequencePrev = this.observationSequenceLast.copy();
 		
-		Observation observation = environment.observe();
-		observationSequence.add(observation);
-		return observationSequence.copy();		
+		Observation observation = this.environment.observe();
+		this.observationSequenceLast.add(observation);
 	}
 	
-	public Object [] update() {
-		ObservationSequence observationSequence0 = observationSequence.copy();
-		Action action0 = agent.call(observationSequence);
-		environment.update(action0);
-		Observation observation = environment.observe();
-		if (observationSequence.size() >= buildOrder.getnSeq()) {
-			observationSequence.remove(0);			
+	public void update() {
+		this.observationSequencePrev = this.observationSequenceLast.copy();
+		
+		this.actionLast = this.agent.call(this.observationSequenceLast);
+		this.environment.update(this.actionLast);
+		Observation observation = this.environment.observe();
+		if (this.observationSequenceLast.size() >= this.buildOrder.getnSeq()) {
+			this.observationSequenceLast.remove(0);			
 		}
-		observationSequence.add(observation);
-		ObservationSequence observationSequence1 = observationSequence0.copy();
-		
-		Object [] rtn = new Object [] {observationSequence0, action0, observationSequence1};
-		return rtn;		
+		this.observationSequenceLast.add(observation);		
 	}
 	
 	public void requestInit(Trainer trainer) {
 		init();
-		trainer.addObservationSequence(observationSequence);
+		trainer.addObservationSequence(this.observationSequenceLast.copy());
 		trainer.setTimeLastUpdate(-1);
 		trainer.setTimeSimulation(-1);
 	}
 	
 	public void requestUpdate(Trainer trainer) {
-		Object [] rtn = (Object [])update();
-		ObservationSequence observationSequence0 = (ObservationSequence)rtn[0];
-		Action action0 = (Action)rtn[1];
-		ObservationSequence observationSequence1 = (ObservationSequence)rtn[2];
 		
-		Reward reward0 = trainer.reward(observationSequence0, action0);
+		this.update();
+		
+		Reward rewardLast = trainer.reward(this.observationSequencePrev, this.actionLast);
 				
-		trainer.addObservationSequence(observationSequence1);
-		trainer.addAction(action0);
-		trainer.addReward(reward0);
+		trainer.addObservationSequence(this.observationSequenceLast.copy());
+		trainer.addAction(this.actionLast);
+		trainer.addReward(rewardLast);
 		trainer.addTimeSimulation();		
 	}
 

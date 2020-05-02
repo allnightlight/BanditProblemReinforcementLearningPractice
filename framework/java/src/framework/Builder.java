@@ -25,32 +25,38 @@ public class Builder {
 		currentlyTrainedAgent = null;
 		currentlyTrainedBuildOrder = null;		
 	}
-	
-	public void build(MyArray<BuildOrder> buildOrders) {
 		
+	public void build(MyArray<BuildOrder> buildOrders) {
+
 		for (BuildOrder buildOrder : buildOrders) {
-			
-			Agent agent = agentFactory.create(buildOrder);
-			Environment environment = environmentFactory.create(buildOrder);
-			ValueFunctionApproximator valueFunctionApproximator = valueFunctionApproximatorFactory.create(buildOrder);
-			RewardGiver rewardGiver = rewardGiverFactory.create(buildOrder);
-			
-			currentlyTrainedBuildOrder = buildOrder;	
-			currentlyTrainedAgent = agent;
-			
-			Trainer trainer = trainerFactory.create(agent, environment, valueFunctionApproximator, rewardGiver, buildOrder);
-			trainer.train(this);
-			
-			currentlyTrainedBuildOrder = null;
-			currentlyTrainedAgent = null;
+			this.buildOneAgent(buildOrder);
 		}
 		
 	}
 	
+	private void buildOneAgent(BuildOrder buildOrder) {
+		this.currentlyTrainedBuildOrder = buildOrder;	
+		this.currentlyTrainedAgent = this.agentFactory.create(buildOrder);
+		Environment environment = this.environmentFactory.create(buildOrder);
+		
+		ValueFunctionApproximator valueFunctionApproximator = this.valueFunctionApproximatorFactory.create(buildOrder);
+		RewardGiver rewardGiver = this.rewardGiverFactory.create(buildOrder);
+		
+		Trainer trainer = this.trainerFactory.create(this.currentlyTrainedAgent, 
+				environment, 
+				valueFunctionApproximator, 
+				rewardGiver, 
+				buildOrder);
+		trainer.train(this);
+		
+		this.currentlyTrainedBuildOrder = null;
+		this.currentlyTrainedAgent = null;		
+	}
+	
 	public void saveAgent(Trainer trainer) {
-		AgentMemento agentMemento = currentlyTrainedAgent.createMemento();
-		StoreField storeField = new StoreField(trainer.getTimeSimulation(), agentMemento, currentlyTrainedBuildOrder);
-		store.save(storeField);
+		AgentMemento agentMemento = this.currentlyTrainedAgent.createMemento();
+		StoreField storeField = new StoreField(trainer.getTimeSimulation(), agentMemento, this.currentlyTrainedBuildOrder);
+		this.store.save(storeField);
 	}
 
 }

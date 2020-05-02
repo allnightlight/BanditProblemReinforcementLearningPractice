@@ -2,7 +2,7 @@ package framework;
 
 public class RewardGiverFactory {
 	
-	static private RewardGiverFactory rewardGiverFactoryUnique = new RewardGiverFactory();
+	static private RewardGiverFactory rewardGiverFactoryUnique;
 	
 	private RewardGiverFactory() {
 		// TODO Auto-generated constructor stub
@@ -13,6 +13,7 @@ public class RewardGiverFactory {
 	}
 
 	public static RewardGiverFactory getRewardGiverFactoryUnique() {
+		RewardGiverFactory.rewardGiverFactoryUnique = new RewardGiverFactory();
 		return rewardGiverFactoryUnique;
 	}
 }

@@ -15,11 +15,13 @@ public class PolicyOptimizer {
 	
 	public void requestUpdate(Trainer trainer) {
 		
-		if((trainer.getTimeSimulation()+1) % buildOrder.getnIntervalPolicyOptimization() == 0) {
+		MyArray<ObservationSequence> observationSequences = null;
+		int i = 0;
+		if((trainer.getTimeSimulation()+1) % this.buildOrder.getnIntervalPolicyOptimization() == 0) {
 			
-			MyArray<ObservationSequence> observationSequences = new MyArray<ObservationSequence>();
-			System.out.println("policy optimization was not implemented yet.");
-			for(int i = 0; i < buildOrder.getnBatchPolicyOptimization(); i++) {
+			observationSequences = new MyArray<ObservationSequence>();
+			// System.out.println("policy optimization was not implemented yet.");
+			for(i = 0; i < this.buildOrder.getnBatchPolicyOptimization(); i++) {
 				observationSequences.add(trainer.getObservationSequence(i));
 			}
 			train(observationSequences);

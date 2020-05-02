@@ -1,7 +1,5 @@
 package framework;
 
-import java.util.Iterator;
-
 public class Main {
 	public static void main(String[] args) {
 		
@@ -18,11 +16,14 @@ public class Main {
 		}
 		
 		Loader loader = new Loader(trainIds);
-		for (Iterator<Object[]> iterator = loader; iterator.hasNext();) {
-			Object [] rtn = (Object []) iterator.next();
-			
+		while(true) {
+			if(loader.hasNext()) {
+				loader.next();
+			}else {
+				break;
+			}			
 		}
-				
+							
 	}
 
 }

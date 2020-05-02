@@ -2,13 +2,14 @@ package framework;
 
 public class TrainerFactory {
 	
-	private static TrainerFactory trainerFactory = new TrainerFactory();
+	private static TrainerFactory trainerFactory;
 	
 	private TrainerFactory() {
 		// TODO Auto-generated constructor stub
 	}
 	
 	public static TrainerFactory getTrainerFactory() {
+		TrainerFactory.trainerFactory = new TrainerFactory();
 		return trainerFactory;
 	}
 	

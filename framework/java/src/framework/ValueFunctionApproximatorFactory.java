@@ -2,7 +2,7 @@ package framework;
 
 public class ValueFunctionApproximatorFactory {
 	
-	static private ValueFunctionApproximatorFactory valueFunctionApproximatorFactoryUnique = new ValueFunctionApproximatorFactory();
+	static private ValueFunctionApproximatorFactory valueFunctionApproximatorFactoryUnique;
 	
 	private ValueFunctionApproximatorFactory() {
 		// TODO Auto-generated constructor stub
@@ -13,6 +13,7 @@ public class ValueFunctionApproximatorFactory {
 	}
 
 	public static ValueFunctionApproximatorFactory getvalueFunctionApproximatorFactoryUnique() {
+		ValueFunctionApproximatorFactory.valueFunctionApproximatorFactoryUnique = new ValueFunctionApproximatorFactory();
 		return valueFunctionApproximatorFactoryUnique;
 	}
 }

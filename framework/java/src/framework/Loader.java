@@ -2,7 +2,7 @@ package framework;
 
 import java.util.Iterator;
 
-public class Loader implements Iterator<Object []>{
+public class Loader{
 	
 	private Store store;
 	private AgentFactory agentFactory;
@@ -16,13 +16,11 @@ public class Loader implements Iterator<Object []>{
 		iterator = trainIds.iterator();		
 	}
 	
-	@Override
 	public boolean hasNext() {
 		// TODO Auto-generated method stub
 		return iterator.hasNext();
 	}
 	
-	@Override
 	public Object[] next() {
 		// TODO Auto-generated method stub
 
@@ -37,7 +35,8 @@ public class Loader implements Iterator<Object []>{
 		Agent agent = agentFactory.create(buildOrder);
 		agent.loadFromMemento(agentMemento);
 		
-		return new Object [] {timeSimulation, agent, buildOrder};
+		// yield {timeSimulation, agent, buildOrder};
+		return null;
 	}
 	
 }
