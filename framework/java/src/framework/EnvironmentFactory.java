@@ -1,10 +1,8 @@
 package framework;
 
 public class EnvironmentFactory {
-	
-	static private EnvironmentFactory environmentFactoryUnique;
-	
-	private EnvironmentFactory() {
+		
+	public EnvironmentFactory() {
 		// TODO Auto-generated constructor stub
 	}
 	
@@ -12,8 +10,4 @@ public class EnvironmentFactory {
 		return new Environment();
 	}
 
-	public static EnvironmentFactory getEnvironmentFactoryUnique() {
-		EnvironmentFactory.environmentFactoryUnique = new EnvironmentFactory(); 
-		return environmentFactoryUnique;
-	}
 }

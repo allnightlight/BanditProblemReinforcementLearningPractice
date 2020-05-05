@@ -16,16 +16,18 @@ public class Trainer {
 	
 	private RewardGiver rewardGiver;
 	
-	private BuildOrder buildOrder;
+	private int nIteration;
+	private int nSaveInterval;
 		
-	public Trainer(ClosedLoopSimulator closedLoopSimulator, ValueFunctionOptimizer valueFunctionOptimizer, PolicyOptimizer policyOptimizer, RewardGiver rewardGiver, BuildOrder buildOrder) {
+	public Trainer(ClosedLoopSimulator closedLoopSimulator, ValueFunctionOptimizer valueFunctionOptimizer, PolicyOptimizer policyOptimizer, RewardGiver rewardGiver, int nIteration, int nSaveInterval) {
 		// TODO Auto-generated constructor stub
 		
-		this.buildOrder = buildOrder;
 		this.closedLoopSimulator = closedLoopSimulator;
 		this.valueFunctionOptimizer = valueFunctionOptimizer;
 		this.policyOptimizer = policyOptimizer;
 		this.rewardGiver = rewardGiver;
+		this.nIteration = nIteration;
+		this.nSaveInterval = nSaveInterval;
 		
 		historyActions = new MyArray<Action>();
 		historyObservationSequences = new MyArray<ObservationSequence>();
@@ -33,22 +35,36 @@ public class Trainer {
 		
 	}
 	
-	public void train(Builder builder) {
-				
-		historyActions.clear();
-		historyObservationSequences.clear();
-		historyRewards.clear();
-		
-		closedLoopSimulator.requestInit(this);
-
-		for(int i=0; i < this.buildOrder.getnEpoch();i ++) {
-			closedLoopSimulator.requestUpdate(this);
-			valueFunctionOptimizer.requestUpdate(this);
-			policyOptimizer.requestUpdate(this);
-		}
-		
+	public void init() {
+		this.historyActions.clear();
+		this.historyObservationSequences.clear();
+		this.historyRewards.clear();		
+		this.closedLoopSimulator.requestInit(this);
 	}
-
+	
+	public void train(int nIterationLocal) {
+		for(int i=0; i < nIterationLocal;i ++) {
+			this.closedLoopSimulator.requestUpdate(this);
+			this.valueFunctionOptimizer.requestUpdate(this);
+			this.policyOptimizer.requestUpdate(this);
+		}		
+	}
+	
+	public void requestTrain(Builder builder) {
+		this.init();
+		int cnt = 0;
+		while(true) {
+			if(cnt < this.nIteration) {
+				builder.saveAgent(this);		
+				this.train(this.nSaveInterval);
+				cnt += this.nSaveInterval;				
+			}else {
+				builder.saveAgent(this);
+				break;
+			}
+		}
+	}
+	
 	
 	public void addObservationSequence(ObservationSequence observationSequence){
 	    historyObservationSequences.add(observationSequence);

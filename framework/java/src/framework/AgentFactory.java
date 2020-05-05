@@ -1,10 +1,8 @@
 package framework;
 
 public class AgentFactory {
-	
-	static private AgentFactory agentFactoryUnique;
-	
-	private AgentFactory() {
+		
+	public AgentFactory() {
 		// TODO Auto-generated constructor stub
 	}
 	
@@ -12,8 +10,4 @@ public class AgentFactory {
 		return new Agent();
 	}
 
-	public static AgentFactory getAgentFactoryUnique() {
-		AgentFactory.agentFactoryUnique  = new AgentFactory();
-		return agentFactoryUnique;
-	}
 }

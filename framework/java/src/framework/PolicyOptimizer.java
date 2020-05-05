@@ -2,11 +2,17 @@ package framework;
 
 public class PolicyOptimizer {
 	
-	private BuildOrder buildOrder;
-
-	public PolicyOptimizer(Agent agent, ValueFunctionApproximator valueFunctionApproximator, BuildOrder buildOrder) {
+	private Agent agent;
+	private ValueFunctionApproximator valueFunctionApproximator;	
+	private int nIntervalPolicyOptimization;
+	private int nBatchPolicyOptimization;
+	
+	public PolicyOptimizer(Agent agent, ValueFunctionApproximator valueFunctionApproximator, int nIntervalPolicyOptimization, int nBatchPolicyOptimization) {
 		// TODO Auto-generated constructor stub
-		this.buildOrder = buildOrder;
+		this.agent = agent;
+		this.valueFunctionApproximator = valueFunctionApproximator;
+		this.nBatchPolicyOptimization = nBatchPolicyOptimization;
+		this.nIntervalPolicyOptimization = nIntervalPolicyOptimization;
 	}
 	
 	public void train(MyArray<ObservationSequence> observationSequences) {
@@ -15,13 +21,14 @@ public class PolicyOptimizer {
 	
 	public void requestUpdate(Trainer trainer) {
 		
+		int nSample = 0;
 		MyArray<ObservationSequence> observationSequences = null;
-		int i = 0;
-		if((trainer.getTimeSimulation()+1) % this.buildOrder.getnIntervalPolicyOptimization() == 0) {
+		if((trainer.getTimeSimulation()+1) % this.nIntervalPolicyOptimization == 0) {
 			
 			observationSequences = new MyArray<ObservationSequence>();
-			// System.out.println("policy optimization was not implemented yet.");
-			for(i = 0; i < this.buildOrder.getnBatchPolicyOptimization(); i++) {
+			nSample = trainer.getTimeSimulation() + 2;
+			
+			for(int i: Utils.myRandomRrandint(0, nSample, this.nBatchPolicyOptimization)) {
 				observationSequences.add(trainer.getObservationSequence(i));
 			}
 			train(observationSequences);

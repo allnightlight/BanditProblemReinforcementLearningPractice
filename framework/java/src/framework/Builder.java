@@ -6,21 +6,24 @@ public class Builder {
 	private AgentFactory agentFactory;
 	private EnvironmentFactory environmentFactory;
 	private ValueFunctionApproximatorFactory valueFunctionApproximatorFactory;
-	private RewardGiverFactory rewardGiverFactory;
-	
+	private RewardGiverFactory rewardGiverFactory;	
 	private TrainerFactory trainerFactory;
 	
 	private Agent currentlyTrainedAgent;
 	private BuildOrder currentlyTrainedBuildOrder;
+	
+	private MyLogger myLogger;
 		
-	public Builder() {
+	public Builder(Store store, AgentFactory agentFactory, EnvironmentFactory environmentFactory, TrainerFactory trainerFactory, ValueFunctionApproximatorFactory valueFunctionApproximatorFactory, RewardGiverFactory rewardGiverFactory, MyLogger myLogger) {
 		// TODO Auto-generated constructor stub
-		store = Store.getStoreUnique();
-		agentFactory = AgentFactory.getAgentFactoryUnique();
-		environmentFactory = EnvironmentFactory.getEnvironmentFactoryUnique();
-		trainerFactory = TrainerFactory.getTrainerFactory();
-		valueFunctionApproximatorFactory = ValueFunctionApproximatorFactory.getvalueFunctionApproximatorFactoryUnique();
-		rewardGiverFactory = RewardGiverFactory.getRewardGiverFactoryUnique();
+		
+		this.store                               = store ;
+		this.agentFactory                        = agentFactory;
+		this.environmentFactory                  = environmentFactory  ;
+		this.trainerFactory                      = trainerFactory  ;
+		this.valueFunctionApproximatorFactory    = valueFunctionApproximatorFactory ;
+		this.rewardGiverFactory                  = rewardGiverFactory ;
+		this.myLogger 							 = myLogger;
 		
 		currentlyTrainedAgent = null;
 		currentlyTrainedBuildOrder = null;		
@@ -47,16 +50,19 @@ public class Builder {
 				valueFunctionApproximator, 
 				rewardGiver, 
 				buildOrder);
-		trainer.train(this);
+		trainer.requestTrain(this);
 		
 		this.currentlyTrainedBuildOrder = null;
 		this.currentlyTrainedAgent = null;		
 	}
 	
 	public void saveAgent(Trainer trainer) {
+		TrainId trainId = TrainId.generateTrainId();
 		AgentMemento agentMemento = this.currentlyTrainedAgent.createMemento();
-		StoreField storeField = new StoreField(trainer.getTimeSimulation(), agentMemento, this.currentlyTrainedBuildOrder);
-		this.store.save(storeField);
+		StoreField storeField = new StoreField(trainer.getTimeSimulation(), agentMemento, this.currentlyTrainedBuildOrder, Utils.generateCurrentDatetimeAsString());
+				
+		this.store.save(trainId, storeField);
+		this.myLogger.info(trainId, storeField);
 	}
 
 }

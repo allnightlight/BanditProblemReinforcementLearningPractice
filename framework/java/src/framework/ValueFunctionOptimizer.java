@@ -2,11 +2,15 @@ package framework;
 
 public class ValueFunctionOptimizer {
 	
-	private BuildOrder buildOrder;
-
-	public ValueFunctionOptimizer(ValueFunctionApproximator valueFunctionApproximator, Agent agent, BuildOrder buildOrder) {
+	private ValueFunctionApproximator valueFunctionApproximator;
+	private Agent agent;
+	private int nHorizonValueOptimization;
+	
+	public ValueFunctionOptimizer(ValueFunctionApproximator valueFunctionApproximator, Agent agent, int nHorizonValueOptimization) {
 		// TODO Auto-generated constructor stub
-		this.buildOrder = buildOrder;
+		this.valueFunctionApproximator = valueFunctionApproximator;
+		this.agent = agent;
+		this.nHorizonValueOptimization = nHorizonValueOptimization;
 	}
 	
 	public void train(MyArray<ObservationSequence> observationSequences, MyArray<Action> actions, MyArray<Reward> rewards) {
@@ -23,19 +27,19 @@ public class ValueFunctionOptimizer {
 		int timeBegin = 0;
 		int j = 0;
 		
-		if(timeLastUpdate + this.buildOrder.getnHorizonValueOptimization() <= timeSimulation) {
+		if(timeLastUpdate + nHorizonValueOptimization <= timeSimulation) {
 			observationSequences = new MyArray<ObservationSequence>();
 			actions = new MyArray<Action>();
 			rewards = new MyArray<Reward>();
 			
-			timeBegin = timeSimulation - this.buildOrder.getnHorizonValueOptimization() + 1;
+			timeBegin = timeSimulation - this.nHorizonValueOptimization + 1;
 			
-			for(j = 0; j < this.buildOrder.getnHorizonValueOptimization();j++) {
+			for(j = 0; j < this.nHorizonValueOptimization;j++) {
 				observationSequences.add(trainer.getObservationSequence(timeBegin + j));
 				actions.add(trainer.getAction(timeBegin + j));
 				rewards.add(trainer.getReward(timeBegin + j));				
 			}
-			observationSequences.add(trainer.getObservationSequence(timeBegin + this.buildOrder.getnHorizonValueOptimization()));
+			observationSequences.add(trainer.getObservationSequence(timeBegin + this.nHorizonValueOptimization));
 			
 			train(observationSequences, actions, rewards);        	
         }

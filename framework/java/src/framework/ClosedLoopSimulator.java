@@ -7,19 +7,20 @@ public class ClosedLoopSimulator {
 	private ObservationSequence observationSequenceLast;
 	private Action actionLast;
 	private ObservationSequence observationSequencePrev;
-	private BuildOrder buildOrder;
+	private int nSeq;
 	
-	public ClosedLoopSimulator(Environment environment, Agent agent, BuildOrder buildOrder) {
+	public ClosedLoopSimulator(Environment environment, Agent agent, int nSeq) {
 		// TODO Auto-generated constructor stub
 		this.agent = agent;
 		this.environment = environment;
-		this.buildOrder = buildOrder;
 		this.observationSequenceLast = new ObservationSequence();
+		this.nSeq = nSeq;
 		this.actionLast = null;
 		this.observationSequencePrev = null;
 	}
 	
 	public void init() {
+		this.environment.init();
 		this.observationSequenceLast.clear();
 		this.observationSequencePrev = this.observationSequenceLast.copy();
 		
@@ -33,7 +34,7 @@ public class ClosedLoopSimulator {
 		this.actionLast = this.agent.call(this.observationSequenceLast);
 		this.environment.update(this.actionLast);
 		Observation observation = this.environment.observe();
-		if (this.observationSequenceLast.size() >= this.buildOrder.getnSeq()) {
+		if (this.observationSequenceLast.size() >= this.nSeq) {
 			this.observationSequenceLast.remove(0);			
 		}
 		this.observationSequenceLast.add(observation);		
