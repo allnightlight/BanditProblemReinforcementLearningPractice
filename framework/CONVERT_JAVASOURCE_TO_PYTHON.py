@@ -14,11 +14,12 @@ classNames = [os.path.splitext(os.path.basename(javaSource))[0]
 
 classNames.remove("Main")
 classNames.remove("MyArray")
-classNames.remove("Loader")
+classNames.remove("Utils")
 
 newSourceName = "./tmp/framework.py"
 txtNew = """\
 from framework.MyArray import MyArray
+from framework.Utils import Utils
 
 """
 for className in classNames:
