@@ -3,7 +3,7 @@ Created on 2020/05/03
 
 @author: ukai
 '''
-from framework.framework import Value
+from framework import Value
 
 class ConcValue(Value):
     '''

@@ -3,7 +3,7 @@ Created on 2020/05/03
 
 @author: ukai
 '''
-from framework.framework import PolicyOptimizer, ObservationSequence
+from framework import PolicyOptimizer, ObservationSequence
 import tensorflow as tf
 
 

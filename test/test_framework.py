@@ -6,9 +6,9 @@ Created on 2020/05/02
 from datetime import datetime
 import unittest
 
-from framework.MyArray import MyArray
-from framework.Utils import Utils
-from framework.framework import BuildOrder, Builder, UseCases
+from MyArray import MyArray
+from Utils import Utils
+from framework import BuildOrder, Builder, UseCases
 
 
 class Test(unittest.TestCase):

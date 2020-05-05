@@ -5,7 +5,7 @@ Created on 2020/05/05
 '''
 from ConcBuildOrder import ConcBuildOrder
 from ConcValueFunctionApproximator import ConcValueFunctionApproximator
-from framework.framework import ValueFunctionApproximatorFactory
+from framework import ValueFunctionApproximatorFactory
 
 
 class ConcValueFunctionApproximatorFactory(ValueFunctionApproximatorFactory):

@@ -5,7 +5,7 @@ Created on 2020/05/05
 '''
 from ConcBuildOrder import ConcBuildOrder
 from ConcEnvironment import ConcEnvironment
-from framework.framework import EnvironmentFactory
+from framework import EnvironmentFactory
 
 
 class ConcEnvironmentFactory(EnvironmentFactory):

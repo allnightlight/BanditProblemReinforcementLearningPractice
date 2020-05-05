@@ -4,7 +4,7 @@ Created on 2020/05/03
 @author: ukai
 '''
 import numpy as np
-from framework.framework import Reward
+from framework import Reward
 
 class ConcReward(Reward):
     '''

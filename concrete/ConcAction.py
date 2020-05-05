@@ -5,7 +5,7 @@ Created on 2020/05/03
 '''
 
 import numpy as np
-from framework.framework import Action
+from framework import Action
 
 class ConcAction(Action):
     '''

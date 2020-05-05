@@ -1,5 +1,5 @@
-from framework.MyArray import MyArray
-from framework.Utils import Utils
+from MyArray import MyArray
+from Utils import Utils
 
 
 """ generated source for module Action """

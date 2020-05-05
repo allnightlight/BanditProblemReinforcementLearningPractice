@@ -10,7 +10,7 @@ from ConcAgentFactory import ConcAgentFactory
 from ConcAgentMemento import ConcAgentMemento
 from ConcBuildOrder import ConcBuildOrder
 from ConcStore import ConcStore
-from framework.framework import TrainId, StoreField
+from framework import TrainId, StoreField
 import shutil
 import os
 

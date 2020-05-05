@@ -8,7 +8,7 @@ import unittest
 from ConcAction import ConcAction
 from ConcEnvironment import ConcEnvironment
 from ConcObservation import ConcObservation
-from framework.framework import EnvironmentFactory
+from framework import EnvironmentFactory
 import numpy as np
 import tensorflow as tf
 from ConcEnvrionmentFactory import ConcEnvironmentFactory

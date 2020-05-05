@@ -11,7 +11,7 @@ from ConcEnvrionmentFactory import ConcEnvironmentFactory
 from ConcRewardGiverFactory import ConcRewardGiverFactory
 from ConcTrainerFactory import ConcTrainerFactory
 from ConcValueFunctionApproximatorFactory import ConcValueFunctionApproximatorFactory
-from framework.framework import Trainer
+from framework import Trainer
 
 
 class Test(unittest.TestCase):

@@ -7,7 +7,7 @@ import unittest
 import numpy as np
 from ConcEnvironment import ConcEnvironment
 from ConcAgent import ConcAgent
-from framework.framework import ClosedLoopSimulator, BuildOrder
+from framework import ClosedLoopSimulator, BuildOrder
 
 
 class Test(unittest.TestCase):

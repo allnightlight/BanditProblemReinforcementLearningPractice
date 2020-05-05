@@ -10,8 +10,8 @@ from ConcAgent import ConcAgent
 from ConcObservation import ConcObservation
 from ConcValueFunctionApproximator import ConcValueFunctionApproximator
 from ConcValueFunctionOptimizer import ConcValueFunctionOptimizer
-from framework.MyArray import MyArray
-from framework.framework import ObservationSequence, PolicyOptimizer
+from MyArray import MyArray
+from framework import ObservationSequence, PolicyOptimizer
 import numpy as np
 from ConcPolicyOptimizer import ConcPolicyOptimizer
 

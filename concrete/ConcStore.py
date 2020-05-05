@@ -8,7 +8,7 @@ import os
 
 from ConcAgentMemento import ConcAgentMemento
 from ConcBuildOrder import ConcBuildOrder
-from framework.framework import Store, StoreField, TrainId
+from framework import Store, StoreField, TrainId
 
 
 class ConcStore(Store):

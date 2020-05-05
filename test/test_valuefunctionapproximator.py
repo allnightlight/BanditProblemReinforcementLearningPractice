@@ -9,7 +9,7 @@ import unittest
 from ConcObservation import ConcObservation
 from ConcValueFunctionApproximator import ConcValueFunctionApproximator
 import numpy as np
-from framework.framework import ObservationSequence
+from framework import ObservationSequence
 from ConcValue import ConcValue
 from ConcValueFunctionApproximatorFactory import ConcValueFunctionApproximatorFactory
 from ConcBuildOrder import ConcBuildOrder

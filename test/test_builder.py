@@ -16,8 +16,8 @@ from ConcRewardGiverFactory import ConcRewardGiverFactory
 from ConcStore import ConcStore
 from ConcTrainerFactory import ConcTrainerFactory
 from ConcValueFunctionApproximatorFactory import ConcValueFunctionApproximatorFactory
-from framework.MyArray import MyArray
-from framework.framework import Builder
+from MyArray import MyArray
+from framework import Builder
 
 
 class Test(unittest.TestCase):

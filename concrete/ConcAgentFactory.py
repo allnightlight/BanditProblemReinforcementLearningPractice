@@ -5,7 +5,7 @@ Created on 2020/05/05
 '''
 from ConcAgent import ConcAgent
 from ConcBuildOrder import ConcBuildOrder
-from framework.framework import AgentFactory
+from framework import AgentFactory
 
 
 class ConcAgentFactory(AgentFactory):

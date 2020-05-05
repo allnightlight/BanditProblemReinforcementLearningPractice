@@ -4,7 +4,7 @@ Created on 2020/05/03
 @author: ukai
 '''
 import numpy as np
-from framework.framework import Environment
+from framework import Environment
 from ConcObservation import ConcObservation
 
 class ConcEnvironment(Environment):

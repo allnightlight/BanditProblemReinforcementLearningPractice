@@ -5,7 +5,7 @@ Created on 2020/05/05
 '''
 from ConcBuildOrder import ConcBuildOrder
 from ConcRewardGiver import ConcRewardGiver
-from framework.framework import RewardGiverFactory
+from framework import RewardGiverFactory
 
 
 class ConcRewardGiverFactory(RewardGiverFactory):

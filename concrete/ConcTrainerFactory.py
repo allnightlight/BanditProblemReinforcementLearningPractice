@@ -5,7 +5,7 @@ Created on 2020/05/05
 '''
 from ConcPolicyOptimizer import ConcPolicyOptimizer
 from ConcValueFunctionOptimizer import ConcValueFunctionOptimizer
-from framework.framework import TrainerFactory, ClosedLoopSimulator, Trainer
+from framework import TrainerFactory, ClosedLoopSimulator, Trainer
 
 
 class ConcTrainerFactory(TrainerFactory):

@@ -6,7 +6,7 @@ Created on 2020/05/03
 
 import numpy as np
 import tensorflow as tf
-from framework.framework import ValueFunctionOptimizer
+from framework import ValueFunctionOptimizer
 from ConcAction import ConcAction
 
 class ConcValueFunctionOptimizer(ValueFunctionOptimizer):

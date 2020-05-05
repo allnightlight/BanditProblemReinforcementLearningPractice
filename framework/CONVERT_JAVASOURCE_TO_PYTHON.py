@@ -18,8 +18,8 @@ classNames.remove("Utils")
 
 newSourceName = "./tmp/framework.py"
 txtNew = """\
-from framework.MyArray import MyArray
-from framework.Utils import Utils
+from MyArray import MyArray
+from Utils import Utils
 
 """
 for className in classNames:

@@ -7,8 +7,8 @@ import os
 
 from ConcAction import ConcAction
 from ConcAgentMemento import ConcAgentMemento
-from framework.Utils import Utils
-from framework.framework import Agent
+from Utils import Utils
+from framework import Agent
 import tensorflow as tf
 
 

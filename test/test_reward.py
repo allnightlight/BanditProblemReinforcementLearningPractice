@@ -9,7 +9,7 @@ from ConcAction import ConcAction
 from ConcObservation import ConcObservation
 from ConcReward import ConcReward
 from ConcRewardGiver import ConcRewardGiver
-from framework.framework import ObservationSequence
+from framework import ObservationSequence
 import numpy as np
 import tensorflow as tf
 from ConcRewardGiverFactory import ConcRewardGiverFactory

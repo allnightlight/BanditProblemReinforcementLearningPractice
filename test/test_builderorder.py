@@ -26,9 +26,7 @@ class Test(unittest.TestCase):
         
         buildOrder = ConcBuildOrder(**arg)
         
-        j = buildOrder.toDict()
-        
-        arg2 = json.loads(j)
+        arg2 = buildOrder.toDict()
         
         assert arg == arg2
         

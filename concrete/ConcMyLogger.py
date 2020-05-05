@@ -3,7 +3,7 @@ Created on 2020/05/05
 
 @author: ukai
 '''
-from framework.framework import MyLogger
+from framework import MyLogger
 from datetime import datetime
 
 class ConcMyLogger(MyLogger):

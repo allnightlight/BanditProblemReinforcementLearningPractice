@@ -11,8 +11,8 @@ from ConcObservation import ConcObservation
 from ConcRewardGiver import ConcRewardGiver
 from ConcValueFunctionApproximator import ConcValueFunctionApproximator
 from ConcValueFunctionOptimizer import ConcValueFunctionOptimizer
-from framework.MyArray import MyArray
-from framework.framework import ObservationSequence
+from MyArray import MyArray
+from framework import ObservationSequence
 import numpy as np
 import tensorflow as tf
 

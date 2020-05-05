@@ -8,7 +8,7 @@ import numpy as np
 from ConcAction import ConcAction
 from ConcAgent import ConcAgent
 import tensorflow as tf
-from framework.framework import ObservationSequence, AgentMemento
+from framework import ObservationSequence, AgentMemento
 from ConcObservation import ConcObservation
 import shutil
 from ConcAgentFactory import ConcAgentFactory

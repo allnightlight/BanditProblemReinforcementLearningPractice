@@ -2,7 +2,7 @@ from datetime import datetime
 import random
 import string
 
-from framework.MyArray import MyArray
+from MyArray import MyArray
 import numpy as np
 
 

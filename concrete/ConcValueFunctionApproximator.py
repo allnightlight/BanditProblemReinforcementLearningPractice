@@ -4,7 +4,7 @@ Created on 2020/05/03
 @author: ukai
 '''
 import tensorflow as tf
-from framework.framework import ValueFunctionApproximator
+from framework import ValueFunctionApproximator
 from ConcValue import ConcValue
 
 class ConcValueFunctionApproximator(ValueFunctionApproximator, tf.keras.Model):
