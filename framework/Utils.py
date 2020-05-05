@@ -1,3 +1,4 @@
+from datetime import datetime
 import random
 import string
 
@@ -19,3 +20,7 @@ class Utils(object):
     def myRandomRrandint(cls, nLow, nHigh, nSize):
         
         return np.random.randint(low=nLow, high=nHigh, size=nSize) # (*,)
+
+    @classmethod
+    def generateCurrentDatetimeAsString(cls):
+        return datetime.strftime(datetime.now(), "%Y-%m-%d %H:%M:%S")
