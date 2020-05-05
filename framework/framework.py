@@ -1,4 +1,5 @@
 from framework.MyArray import MyArray
+from framework.Utils import Utils
 
 
 """ generated source for module Action """
@@ -35,7 +36,6 @@ class Agent(object):
 """ generated source for module AgentFactory """
 # package: framework
 class AgentFactory(object):
-
     def __init__(self):
         """ generated source for method __init__ """
         #  TODO Auto-generated constructor stub
@@ -43,12 +43,6 @@ class AgentFactory(object):
     def create(self, buildOrder):
         """ generated source for method create """
         return Agent()
-
-    @classmethod
-    def getAgentFactoryUnique(cls):
-        """ generated source for method getAgentFactoryUnique """
-        AgentFactory.agentFactoryUnique = AgentFactory()
-        return cls.agentFactoryUnique
 
 
 
@@ -63,15 +57,16 @@ class AgentMemento(object):
 # package: framework
 class Builder(object):
 
-    def __init__(self):
+    def __init__(self, store, agentFactory, environmentFactory, trainerFactory, valueFunctionApproximatorFactory, rewardGiverFactory, myLogger):
         """ generated source for method __init__ """
         #  TODO Auto-generated constructor stub
-        self.store = Store.getStoreUnique()
-        self.agentFactory = AgentFactory.getAgentFactoryUnique()
-        self.environmentFactory = EnvironmentFactory.getEnvironmentFactoryUnique()
-        self.trainerFactory = TrainerFactory.getTrainerFactory()
-        self.valueFunctionApproximatorFactory = ValueFunctionApproximatorFactory.getvalueFunctionApproximatorFactoryUnique()
-        self.rewardGiverFactory = RewardGiverFactory.getRewardGiverFactoryUnique()
+        self.store = store
+        self.agentFactory = agentFactory
+        self.environmentFactory = environmentFactory
+        self.trainerFactory = trainerFactory
+        self.valueFunctionApproximatorFactory = valueFunctionApproximatorFactory
+        self.rewardGiverFactory = rewardGiverFactory
+        self.myLogger = myLogger
         self.currentlyTrainedAgent = None
         self.currentlyTrainedBuildOrder = None
 
@@ -88,15 +83,17 @@ class Builder(object):
         valueFunctionApproximator = self.valueFunctionApproximatorFactory.create(buildOrder)
         rewardGiver = self.rewardGiverFactory.create(buildOrder)
         trainer = self.trainerFactory.create(self.currentlyTrainedAgent, environment, valueFunctionApproximator, rewardGiver, buildOrder)
-        trainer.train(self)
+        trainer.requestTrain(self)
         self.currentlyTrainedBuildOrder = None
         self.currentlyTrainedAgent = None
 
     def saveAgent(self, trainer):
         """ generated source for method saveAgent """
+        trainId = TrainId.generateTrainId()
         agentMemento = self.currentlyTrainedAgent.createMemento()
-        storeField = StoreField(trainer.getTimeSimulation(), agentMemento, self.currentlyTrainedBuildOrder)
-        self.store.save(storeField)
+        storeField = StoreField(trainer.getTimeSimulation(), agentMemento, self.currentlyTrainedBuildOrder, Utils.generateCurrentDatetimeAsString())
+        self.store.save(trainId, storeField)
+        self.myLogger.info(trainId, storeField)
 
 
 
@@ -104,18 +101,20 @@ class Builder(object):
 # package: framework
 class BuildOrder(object):
 
-    def __init__(self, nEpoch, nSeq, nHorizonValueOptimization, nIntervalPolicyOptimization, nBatchPolicyOptimization):
+    def __init__(self, nIteration, nSeq, nHorizonValueOptimization, nIntervalPolicyOptimization, nBatchPolicyOptimization, nSaveInterval, description):
         """ generated source for method __init__ """
         #  TODO Auto-generated constructor stub
-        self.nEpoch = nEpoch
+        self.nIteration = nIteration
         self.nSeq = nSeq
         self.nHorizonValueOptimization = nHorizonValueOptimization
         self.nIntervalPolicyOptimization = nIntervalPolicyOptimization
         self.nBatchPolicyOptimization = nBatchPolicyOptimization
+        self.nSaveInterval = nSaveInterval
+        self.description = description
 
-    def getnEpoch(self):
-        """ generated source for method getnEpoch """
-        return self.nEpoch
+    def getnIteration(self):
+        """ generated source for method getnIteration """
+        return self.nIteration
 
     def getnSeq(self):
         """ generated source for method getnSeq """
@@ -133,24 +132,33 @@ class BuildOrder(object):
         """ generated source for method getnBatchPolicyOptimization """
         return self.nBatchPolicyOptimization
 
+    def getnSaveInterval(self):
+        """ generated source for method getnSaveInterval """
+        return self.nSaveInterval
+
+    def getDescription(self):
+        """ generated source for method getDescription """
+        return self.description
+
 
 
 """ generated source for module ClosedLoopSimulator """
 # package: framework
 class ClosedLoopSimulator(object):
 
-    def __init__(self, environment, agent, buildOrder):
+    def __init__(self, environment, agent, nSeq):
         """ generated source for method __init__ """
         #  TODO Auto-generated constructor stub
         self.agent = agent
         self.environment = environment
-        self.buildOrder = buildOrder
         self.observationSequenceLast = ObservationSequence()
+        self.nSeq = nSeq
         self.actionLast = None
         self.observationSequencePrev = None
 
     def init(self):
         """ generated source for method init """
+        self.environment.init()
         self.observationSequenceLast.clear()
         self.observationSequencePrev = self.observationSequenceLast.copy()
         observation = self.environment.observe()
@@ -162,7 +170,7 @@ class ClosedLoopSimulator(object):
         self.actionLast = self.agent.call(self.observationSequenceLast)
         self.environment.update(self.actionLast)
         observation = self.environment.observe()
-        if len(self.observationSequenceLast) >= self.buildOrder.getnSeq():
+        if len(self.observationSequenceLast) >= self.nSeq:
             self.observationSequenceLast.remove(0)
         self.observationSequenceLast.add(observation)
 
@@ -202,7 +210,6 @@ class Environment(object):
 """ generated source for module EnvironmentFactory """
 # package: framework
 class EnvironmentFactory(object):
-
     def __init__(self):
         """ generated source for method __init__ """
         #  TODO Auto-generated constructor stub
@@ -211,11 +218,13 @@ class EnvironmentFactory(object):
         """ generated source for method create """
         return Environment()
 
-    @classmethod
-    def getEnvironmentFactoryUnique(cls):
-        """ generated source for method getEnvironmentFactoryUnique """
-        EnvironmentFactory.environmentFactoryUnique = EnvironmentFactory()
-        return cls.environmentFactoryUnique
+
+
+""" generated source for module MyLogger """
+# package: framework
+class MyLogger(object):
+    def info(self, trainId, storeField):
+        """ generated source for method info """
 
 
 
@@ -246,10 +255,13 @@ class ObservationSequence(MyArray, Observation):
 # package: framework
 class PolicyOptimizer(object):
 
-    def __init__(self, agent, valueFunctionApproximator, buildOrder):
+    def __init__(self, agent, valueFunctionApproximator, nIntervalPolicyOptimization, nBatchPolicyOptimization):
         """ generated source for method __init__ """
         #  TODO Auto-generated constructor stub
-        self.buildOrder = buildOrder
+        self.agent = agent
+        self.valueFunctionApproximator = valueFunctionApproximator
+        self.nBatchPolicyOptimization = nBatchPolicyOptimization
+        self.nIntervalPolicyOptimization = nIntervalPolicyOptimization
 
     def train(self, observationSequences):
         """ generated source for method train """
@@ -257,20 +269,13 @@ class PolicyOptimizer(object):
 
     def requestUpdate(self, trainer):
         """ generated source for method requestUpdate """
+        nSample = 0
         observationSequences = None
-        i = 0
-        if (trainer.getTimeSimulation() + 1) % self.buildOrder.getnIntervalPolicyOptimization() == 0:
+        if (trainer.getTimeSimulation() + 1) % self.nIntervalPolicyOptimization == 0:
             observationSequences = MyArray()
-            #  print "policy optimization was not implemented yet.";
-            #  TODO Auto-generated constructor stub
-            #  NOT IMPLEMENTED YET
-            #  print "policy optimization was not implemented yet.";
-            while i < self.buildOrder.getnBatchPolicyOptimization():
-                #  TODO Auto-generated constructor stub
-                #  NOT IMPLEMENTED YET
-                #  print "policy optimization was not implemented yet.";
+            nSample = trainer.getTimeSimulation() + 2
+            for i in Utils.myRandomRrandint(0, nSample, self.nBatchPolicyOptimization):
                 observationSequences.add(trainer.getObservationSequence(i))
-                i += 1
             self.train(observationSequences)
             trainer.markPolicyUpdate()
 
@@ -302,7 +307,6 @@ class RewardGiver(object):
 """ generated source for module RewardGiverFactory """
 # package: framework
 class RewardGiverFactory(object):
-
     def __init__(self):
         """ generated source for method __init__ """
         #  TODO Auto-generated constructor stub
@@ -311,34 +315,21 @@ class RewardGiverFactory(object):
         """ generated source for method create """
         return RewardGiver()
 
-    @classmethod
-    def getRewardGiverFactoryUnique(cls):
-        """ generated source for method getRewardGiverFactoryUnique """
-        RewardGiverFactory.rewardGiverFactoryUnique = RewardGiverFactory()
-        return cls.rewardGiverFactoryUnique
-
 
 
 """ generated source for module Store """
 # package: framework
 class Store(object):
-
     def __init__(self):
         """ generated source for method __init__ """
         #  TODO Auto-generated constructor stub
 
-    @classmethod
-    def getStoreUnique(cls):
-        """ generated source for method getStoreUnique """
-        Store.storeUnique = Store()
-        return cls.storeUnique
-
-    def save(self, storeField):
+    def save(self, trainId, storeField):
         """ generated source for method save """
 
     def load(self, trainId):
         """ generated source for method load """
-        return None
+        return StoreField(0, AgentMemento(), BuildOrder(1, 2, 3, 4, 5, 6, "stub"), "2020-05-05 14:45:59")
 
 
 
@@ -346,12 +337,13 @@ class Store(object):
 # package: framework
 class StoreField(object):
 
-    def __init__(self, timeSimulation, agentMemento, buildOrder):
+    def __init__(self, timeSimulation, agentMemento, buildOrder, timeStamp):
         """ generated source for method __init__ """
         #  TODO Auto-generated constructor stub
         self.timeSimulation = timeSimulation
         self.agentMemento = agentMemento
         self.buildOrder = buildOrder
+        self.timeStamp = timeStamp
 
     def getAgentMemento(self):
         """ generated source for method getAgentMemento """
@@ -365,38 +357,59 @@ class StoreField(object):
         """ generated source for method getBuildOrder """
         return self.buildOrder
 
+    def getTimeStamp(self):
+        """ generated source for method getTimeStamp """
+        return self.timeStamp
+
 
 
 """ generated source for module Trainer """
 # package: framework
 class Trainer(object):
 
-    def __init__(self, closedLoopSimulator, valueFunctionOptimizer, policyOptimizer, rewardGiver, buildOrder):
+    def __init__(self, closedLoopSimulator, valueFunctionOptimizer, policyOptimizer, rewardGiver, nIteration, nSaveInterval):
         """ generated source for method __init__ """
         #  TODO Auto-generated constructor stub
-        self.buildOrder = buildOrder
         self.closedLoopSimulator = closedLoopSimulator
         self.valueFunctionOptimizer = valueFunctionOptimizer
         self.policyOptimizer = policyOptimizer
         self.rewardGiver = rewardGiver
+        self.nIteration = nIteration
+        self.nSaveInterval = nSaveInterval
         self.historyActions = MyArray()
         self.historyObservationSequences = MyArray()
         self.historyRewards = MyArray()
 
-    def train(self, builder):
-        """ generated source for method train """
+    def init(self):
+        """ generated source for method init """
         self.historyActions.clear()
         self.historyObservationSequences.clear()
         self.historyRewards.clear()
         self.closedLoopSimulator.requestInit(self)
+
+    def train(self, nIterationLocal):
+        """ generated source for method train """
         #  TODO Auto-generated constructor stub
         i = 0
-        while i < self.buildOrder.getnEpoch():
+        while i < nIterationLocal:
             #  TODO Auto-generated constructor stub
             self.closedLoopSimulator.requestUpdate(self)
             self.valueFunctionOptimizer.requestUpdate(self)
             self.policyOptimizer.requestUpdate(self)
             i += 1
+
+    def requestTrain(self, builder):
+        """ generated source for method requestTrain """
+        self.init()
+        cnt = 0
+        while True:
+            if cnt < self.nIteration:
+                builder.saveAgent(self)
+                self.train(self.nSaveInterval)
+                cnt += self.nSaveInterval
+            else:
+                builder.saveAgent(self)
+                break
 
     def addObservationSequence(self, observationSequence):
         """ generated source for method addObservationSequence """
@@ -455,37 +468,74 @@ class Trainer(object):
 """ generated source for module TrainerFactory """
 # package: framework
 class TrainerFactory(object):
-
     def __init__(self):
         """ generated source for method __init__ """
         #  TODO Auto-generated constructor stub
 
-    @classmethod
-    def getTrainerFactory(cls):
-        """ generated source for method getTrainerFactory """
-        TrainerFactory.trainerFactory = TrainerFactory()
-        return cls.trainerFactory
-
     def create(self, agent, environment, valueFunctionApproximator, rewardGiver, buildOrder):
         """ generated source for method create """
-        closedLoopSimulator = ClosedLoopSimulator(environment, agent, buildOrder)
-        valueFunctionOptimizer = ValueFunctionOptimizer(valueFunctionApproximator, agent, buildOrder)
-        policyOptimizer = PolicyOptimizer(agent, valueFunctionApproximator, buildOrder)
-        return Trainer(closedLoopSimulator, valueFunctionOptimizer, policyOptimizer, rewardGiver, buildOrder)
+        closedLoopSimulator = ClosedLoopSimulator(environment, agent, buildOrder.getnSeq())
+        valueFunctionOptimizer = ValueFunctionOptimizer(valueFunctionApproximator, agent, buildOrder.getnHorizonValueOptimization())
+        policyOptimizer = PolicyOptimizer(agent, valueFunctionApproximator, buildOrder.getnIntervalPolicyOptimization(), buildOrder.getnBatchPolicyOptimization())
+        return Trainer(closedLoopSimulator, valueFunctionOptimizer, policyOptimizer, rewardGiver, buildOrder.getnIteration(), buildOrder.getnSaveInterval())
 
 
 
 """ generated source for module TrainId """
 # package: framework
 class TrainId(object):
-    """ generated source for class TrainId """
+
+    def __init__(self, idStr):
+        """ generated source for method __init__ """
+        #  TODO Auto-generated constructor stub
+        self.idStr = idStr
+
+    @classmethod
+    def generateTrainId(cls):
+        """ generated source for method generateTrainId """
+        key = Utils.generateRandomString(16)
+        trainId = TrainId(key)
+        return trainId
+
+    def __str__(self):
+        """ generated source for method toString """
+        #  TODO Auto-generated method stub
+        return self.idStr
 
 
 
-""" generated source for module User """
+""" generated source for module UseCases """
 # package: framework
-class User(object):
-    """ generated source for class User """
+class UseCases(object):
+    def case001(self):
+        """ generated source for method case001 """
+        store = Store()
+        agentFactory = AgentFactory()
+        environmentFactory = EnvironmentFactory()
+        trainerFactory = TrainerFactory()
+        valueFunctionApproximatorFactory = ValueFunctionApproximatorFactory()
+        rewardGiverFactory = RewardGiverFactory()
+        myLogger = MyLogger()
+        buildOrders = MyArray()
+        i = 0
+        while i < 10:
+            buildOrders.add(BuildOrder(100, 3, 2, 10, 16, 3, ""))
+            i += 1
+        builder = Builder(store, agentFactory, environmentFactory, trainerFactory, valueFunctionApproximatorFactory, rewardGiverFactory, myLogger)
+        builder.build(buildOrders)
+
+    def case002(self):
+        """ generated source for method case002 """
+        store = Store()
+        agentFactory = AgentFactory()
+        # 
+        trainId = TrainId("test")
+        storeField = store.load(trainId)
+        timeSimulation = storeField.getTimeSimulation()
+        buildOrder = storeField.getBuildOrder()
+        agentMemento = storeField.getAgentMemento()
+        agent = agentFactory.create(buildOrder)
+        agent.loadFromMemento(agentMemento)
 
 
 
@@ -515,7 +565,6 @@ class ValueFunctionApproximator(object):
 """ generated source for module ValueFunctionApproximatorFactory """
 # package: framework
 class ValueFunctionApproximatorFactory(object):
-
     def __init__(self):
         """ generated source for method __init__ """
         #  TODO Auto-generated constructor stub
@@ -524,22 +573,18 @@ class ValueFunctionApproximatorFactory(object):
         """ generated source for method create """
         return ValueFunctionApproximator()
 
-    @classmethod
-    def getvalueFunctionApproximatorFactoryUnique(cls):
-        """ generated source for method getvalueFunctionApproximatorFactoryUnique """
-        ValueFunctionApproximatorFactory.valueFunctionApproximatorFactoryUnique = ValueFunctionApproximatorFactory()
-        return cls.valueFunctionApproximatorFactoryUnique
-
 
 
 """ generated source for module ValueFunctionOptimizer """
 # package: framework
 class ValueFunctionOptimizer(object):
 
-    def __init__(self, valueFunctionApproximator, agent, buildOrder):
+    def __init__(self, valueFunctionApproximator, agent, nHorizonValueOptimization):
         """ generated source for method __init__ """
         #  TODO Auto-generated constructor stub
-        self.buildOrder = buildOrder
+        self.valueFunctionApproximator = valueFunctionApproximator
+        self.agent = agent
+        self.nHorizonValueOptimization = nHorizonValueOptimization
 
     def train(self, observationSequences, actions, rewards):
         """ generated source for method train """
@@ -554,21 +599,21 @@ class ValueFunctionOptimizer(object):
         rewards = None
         timeBegin = 0
         j = 0
-        if timeLastUpdate + self.buildOrder.getnHorizonValueOptimization() <= timeSimulation:
+        if timeLastUpdate + self.nHorizonValueOptimization <= timeSimulation:
             observationSequences = MyArray()
             actions = MyArray()
             rewards = MyArray()
-            timeBegin = timeSimulation - self.buildOrder.getnHorizonValueOptimization() + 1
+            timeBegin = timeSimulation - self.nHorizonValueOptimization + 1
             #  TODO Auto-generated constructor stub
             #  NOT IMPLEMENTED YET
-            while j < self.buildOrder.getnHorizonValueOptimization():
+            while j < self.nHorizonValueOptimization:
                 #  TODO Auto-generated constructor stub
                 #  NOT IMPLEMENTED YET
                 observationSequences.add(trainer.getObservationSequence(timeBegin + j))
                 actions.add(trainer.getAction(timeBegin + j))
                 rewards.add(trainer.getReward(timeBegin + j))
                 j += 1
-            observationSequences.add(trainer.getObservationSequence(timeBegin + self.buildOrder.getnHorizonValueOptimization()))
+            observationSequences.add(trainer.getObservationSequence(timeBegin + self.nHorizonValueOptimization))
             self.train(observationSequences, actions, rewards)
 
 
