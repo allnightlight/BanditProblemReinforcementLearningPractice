@@ -25,12 +25,15 @@ Table1. the rewarding probability of levers
 </p>
 
 <p>
-|Lever|Probability|
-|:---:|:---------:|
-|1    |  0.5      |
-|2    |  0.25     |
-|3    |  0.125    |
-|4    |  0.125    |
+<table>
+<tr>
+<th>Lever</th><th>Probability</th>
+</tr>
+<tr><td align="center">1    </td><td align="center">  0.5      </td></tr>
+<tr><td align="center">2    </td><td align="center">  0.25     </td></tr>
+<tr><td align="center">3    </td><td align="center">  0.125    </td></tr>
+<tr><td align="center">4    </td><td align="center">  0.125    </td></tr>
+</table>
 </p>
 </div>
 
@@ -52,7 +55,7 @@ You can notice...
 
 <div align="center">
 <p>
-<img src="./img/fig001.png" width="320px">
+<img src="./img/fig001.png" width="480px">
 </p>
 
 <p>
@@ -72,7 +75,7 @@ In the fig.2, you can observe that
 
 <div align="center">
 <p>
-<img src="./img/fig002.png" width="320px">
+<img src="./img/fig002.png" width="480px">
 </p>
 
 <p>
