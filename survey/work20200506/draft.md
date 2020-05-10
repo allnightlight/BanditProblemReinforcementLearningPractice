@@ -25,7 +25,7 @@ Table1. the rewarding probability of levers
 </p>
 
 <p>
-<table>
+<table align="center">
 <tr>
 <th>Lever</th><th>Probability</th>
 </tr>
@@ -59,7 +59,7 @@ You can notice...
 </p>
 
 <p>
-Fig1: the result of the parameter convergence over the training of the single agent
+Figure 1: the result of the parameter convergence over the training of the single agent
 </p>
 </div>
 
@@ -79,13 +79,14 @@ In the fig.2, you can observe that
 </p>
 
 <p>
-Fig2: the result of the parameter convergence over the training of multiple agents
+Figure 2: the result of the parameter convergence over the training of multiple agents
 </p>
 </div>
 
 # Summary
 
 Easiest tests have been done in the training framework for actor critic methods.
+
 Further tests would come soon.
 
 
