@@ -1,5 +1,4 @@
 
-
 # Introduction 
 
 A training framework for actor critic methods is being constructed.
@@ -18,16 +17,23 @@ in a discrete action plant.
 Here is the detail of the bandit problem:
 - It has the four levers.
 - Every time an agent plays a game, each lever independently gives a unit reward (=1) with the following identical probability
-
-Table1. the rewarding probability of levers
-
-Lever Probability
-1      0.5
-2      0.25
-3      0.125
-4      0.125
-
 In this setting, selecting the first lever is the unique optimal policy for the agent.
+
+<div align="center">
+<p>
+Table1. the rewarding probability of levers
+</p>
+
+<p>
+|Lever|Probability|
+|:---:|:---------:|
+|1    |  0.5      |
+|2    |  0.25     |
+|3    |  0.125    |
+|4    |  0.125    |
+</p>
+</div>
+
 
 # Tests
 
@@ -44,15 +50,35 @@ The figure below shows the result of the parameter convergence of this training 
 You can notice...
 - The policy is approaching to the optimal policy(selecting the first lever)
 
+<div align="center">
+<p>
+<img src="./img/fig001.png" width="320px">
+</p>
+
+<p>
+Fig1: the result of the parameter convergence over the training of the single agent
+</p>
+</div>
+
 ## Test #2
 
 The second test multiplies the first test many times
 in order to strengthen the validity of training framework.
 In addition to the setting of the first test,
-- 100 agents are trained.
+- 30 agents are trained.
 
-You can observe that 
+In the fig.2, you can observe that 
 - all the agents approach to the optimal policy with the random initial setting.
+
+<div align="center">
+<p>
+<img src="./img/fig002.png" width="320px">
+</p>
+
+<p>
+Fig2: the result of the parameter convergence over the training of multiple agents
+</p>
+</div>
 
 # Summary
 
